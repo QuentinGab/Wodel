@@ -1,12 +1,12 @@
 {
-    "name": ":vendor/wodel",
+    "name": "QuentinGab/wodel",
     "type": "library",
     "description": "WordPress Post Model",
     "keywords": [
-        ":vendor",
+        "QuentinGab",
         "wodel"
     ],
-    "homepage": "https://github.com/:vendor/wodel",
+    "homepage": "https://github.com/QuentinGab/wodel",
     "license": "MIT",
     "authors": [
         {
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            ":vendor\\wodel\\": "src"
+            "QuentinGab\\wodel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            ":vendor\\wodel\\": "tests"
+            "QuentinGab\\wodel\\": "tests"
         }
     },
     "scripts": {

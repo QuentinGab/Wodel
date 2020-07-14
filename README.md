@@ -23,7 +23,7 @@ tests/
 Via Composer
 
 ``` bash
-$ composer require :vendor/wodel
+$ composer require QuentinGab/wodel
 ```
 
 ## Usage
@@ -68,17 +68,17 @@ If you discover any security related issues, please email quentin.gabriele@gmail
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/:vendor/wodel.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/QuentinGab/wodel.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/:vendor/wodel/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/:vendor/wodel.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/wodel.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/:vendor/wodel.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/QuentinGab/wodel/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/QuentinGab/wodel.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/QuentinGab/wodel.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/QuentinGab/wodel.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/:vendor/wodel
-[link-travis]: https://travis-ci.org/:vendor/wodel
-[link-scrutinizer]: https://scrutinizer-ci.com/g/:vendor/wodel/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/:vendor/wodel
-[link-downloads]: https://packagist.org/packages/:vendor/wodel
+[link-packagist]: https://packagist.org/packages/QuentinGab/wodel
+[link-travis]: https://travis-ci.org/QuentinGab/wodel
+[link-scrutinizer]: https://scrutinizer-ci.com/g/QuentinGab/wodel/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/QuentinGab/wodel
+[link-downloads]: https://packagist.org/packages/QuentinGab/wodel
 [link-author]: https://github.com/QuentinGab
 [link-contributors]: ../../contributors
