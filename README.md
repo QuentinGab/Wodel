@@ -1,6 +1,6 @@
 # wodel
 
-[![Latest Version on Packagist][ico-version]][https://packagist.org/packages/quentingab/wodel]
+[![Latest Version on Packagist][ico-version]][link-packagist](https://packagist.org/packages/quentingab/wodel)
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
