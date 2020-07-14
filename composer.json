@@ -1,18 +1,18 @@
 {
-    "name": ":vendor/:package_name",
+    "name": ":vendor/wodel",
     "type": "library",
-    "description": ":package_description",
+    "description": "WordPress Post Model",
     "keywords": [
         ":vendor",
-        ":package_name"
+        "wodel"
     ],
-    "homepage": "https://github.com/:vendor/:package_name",
+    "homepage": "https://github.com/:vendor/wodel",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": ":author_website",
+            "name": "quentin gabriele",
+            "email": "quentin.gabriele@gmail.com",
+            "homepage": "https://linkedin.com/in/quentin-gabriele-86b161196/",
             "role": "Developer"
         }
     ],
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            ":vendor\\:package_name\\": "src"
+            ":vendor\\wodel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            ":vendor\\:package_name\\": "tests"
+            ":vendor\\wodel\\": "tests"
         }
     },
     "scripts": {
