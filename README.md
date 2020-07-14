@@ -29,15 +29,17 @@ $ composer require quentingab/wodel
 
 ## Usage
 
+### Get all posts/page/custom post type
 ``` php
-$posts = quentingab\Models\Wodel::all();
+$posts = QuentinGgab\Models\Wodel::all();
 foreach($posts as $post){
     echo $post->post_title;
 }
 ```
 
+### Update a post
 ``` php
-$post = quentingab\Models\Wodel::current();
+$post = QuentinGab\Models\Wodel::current();
 $post->post_title = "Hello World";
 $post->save();
 ```
@@ -62,8 +64,8 @@ If you discover any security related issues, please email quentin.gabriele@gmail
 
 ## Credits
 
-- [quentin gabriele][link-author]
-- [All Contributors][link-contributors]
+- [quentin gabriele](https://github.com/QuentinGab)
+<!-- - [All Contributors][link-contributors] -->
 
 ## License
 
