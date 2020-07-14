@@ -10,7 +10,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="QuentinGab Test Suite">
+        <testsuite name="quentingab Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

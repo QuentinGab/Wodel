@@ -2,7 +2,7 @@
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/QuentinGab/wodel).
+We accept contributions via Pull Requests on [Github](https://github.com/quentingab/wodel).
 
 
 ## Pull Requests
