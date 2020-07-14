@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "quentingab\\wodel\\": "src"
+            "QuentinGab\\Wodel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "quentingab\\wodel\\": "tests"
+            "QuentinGab\\Wodel\\": "tests"
         }
     },
     "scripts": {
