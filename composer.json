@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "quentinGab\\Wodel\\": "tests"
+            "QuentinGab\\Wodel\\": "tests"
         }
     },
     "scripts": {
