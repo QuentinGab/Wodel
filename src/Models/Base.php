@@ -1,6 +1,5 @@
 <?php
 declare (strict_types = 1);
-//test
 namespace QuentinGab\Wodel\Models;
 use QuentinGab\Wodel\Collection;
 
