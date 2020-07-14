@@ -2,9 +2,9 @@
 
 [![Latest Version on Packagist][ico-version]](https://packagist.org/packages/quentingab/wodel)
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+<!-- [![Build Status][ico-travis]][link-travis] -->
+<!-- [![Coverage Status][ico-scrutinizer]][link-scrutinizer] -->
+<!-- [![Quality Score][ico-code-quality]][link-code-quality] -->
 [![Total Downloads][ico-downloads]](https://packagist.org/packages/quentingab/wodel)
 
 ## Structure
