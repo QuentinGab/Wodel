@@ -1,6 +1,7 @@
 <?php
 declare (strict_types = 1);
 namespace QuentinGab\Wodel\Models;
+use QuentinGab\Wodel\Collection;
 
 class Wodel extends Base
 {

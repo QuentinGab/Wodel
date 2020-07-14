@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace QuentinGab\Wodel\Models;
+namespace QuentinGab\Wodel;
 
 class Collection implements \Countable, \Iterator, \ArrayAccess
 {
