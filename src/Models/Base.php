@@ -51,11 +51,6 @@ class Base
         return $value;
     }
 
-    public function toArray()
-    {
-        return get_object_vars($this);
-    }
-
     public function fillableToArray()
     {
         $array = $this->toArray();
@@ -78,6 +73,11 @@ class Base
     public function fresh()
     {
         return $this->_find($this->id);
+    }
+
+    public function toArray()
+    {
+        return get_object_vars($this);
     }
 
 }

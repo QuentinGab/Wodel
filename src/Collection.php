@@ -123,6 +123,16 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
     }
 
+    public function filter($fun)
+    {
+        $this->items = array_filter($this->items, $fun);
+    }
+
+    public function map($fun)
+    {
+        $this->items = array_map($fun, $this->items);
+    }
+
     public function toArray()
     {
         return $this->items;
