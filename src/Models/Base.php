@@ -80,4 +80,9 @@ class Base
         return get_object_vars($this);
     }
 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
 }

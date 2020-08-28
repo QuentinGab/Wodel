@@ -27,8 +27,17 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
         return count($this->items);
     }
 
-    //Iterator
+    public function isEmpty()
+    {
+        return $this->count() == 0;
+    }
 
+    public function isNotEmpty()
+    {
+        return !$this->isEmpty();
+    }
+
+    //Iterator
     public function rewind()
     {
         $this->position = 0;
@@ -125,7 +134,7 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
     public function filter($fun)
     {
-        $this->items = array_filter($this->items, $fun);
+        $this->items = array_values(array_filter($this->items, $fun));
         return $this;
     }
 
@@ -142,9 +151,7 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
     public function unique()
     {
-
         return self::collect(array_unique($this->items));
-
     }
 
 }
