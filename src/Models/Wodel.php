@@ -21,6 +21,15 @@ class Wodel extends Base
         }
 
     }
+    
+    public function __get($property)
+    {
+        if(method_exists(__CLASS__,$property)){
+            return $this->$property();
+        }
+        
+        return null;
+    }
 
     public static function current()
     {
