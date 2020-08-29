@@ -209,7 +209,7 @@ class Wodel extends Base
         $args = array_merge([
             'id'=>null,
              'class'=>'img-fluid',
-              'size'=>'my_large
+              'size'=>'my_large'
          ],$array);
 
         if (!is_null($args['id']) && $args['id']) {
@@ -231,7 +231,7 @@ class Wodel extends Base
         $args = array_merge([
             'id'=>null,
              'class'=>'img-fluid',
-              'size'=>'my_large
+              'size'=>'my_large'
          ],$array);
 
         if (!is_null($args['id']) && $args['id']) {
