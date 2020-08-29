@@ -204,16 +204,21 @@ class Wodel extends Base
         return false;
     }
 
-    public function image($size = 'my_large', $id = null)
+    public function image($array = [])
     {
+        $args = array_merge([
+            'id'=>null,
+             'class'=>'img-fluid',
+              'size'=>'my_large
+         ],$array);
 
-        if (!is_null($id) && $id) {
+        if (!is_null($args['id']) && $args['id']) {
 
-            return wp_get_attachment_image($id, $size, false, ['class' => 'img-fluid']);
+            return wp_get_attachment_image($args['id'], $args['size'], false, ['class' => $args['class']]);
 
         } else if (has_post_thumbnail($this->ID)) {
 
-            return wp_get_attachment_image(get_post_thumbnail_id($this->ID), $size, false, ['class' => 'img-fluid']);
+            return wp_get_attachment_image(get_post_thumbnail_id($this->ID), $args['size'], false, ['class' => $args['class']]);
 
         } else {
             return null;
@@ -221,17 +226,26 @@ class Wodel extends Base
 
     }
 
-    public function image_url($size = 'my_large', $id = null)
+    public function image_url($array = [])
     {
-        if (!is_null($id) && $id) {
-            return wp_get_attachment_image_url($id, $size, false, ['class' => 'img-fluid']);
+        $args = array_merge([
+            'id'=>null,
+             'class'=>'img-fluid',
+              'size'=>'my_large
+         ],$array);
+
+        if (!is_null($args['id']) && $args['id']) {
+
+            return wp_get_attachment_image_url($args['id'], $args['size'], false, ['class' => $args['class']]);
 
         } else if (has_post_thumbnail($this->ID)) {
-            return wp_get_attachment_image_url(get_post_thumbnail_id($this->ID), $size, false, ['class' => 'img-fluid']);
+
+            return wp_get_attachment_image_url(get_post_thumbnail_id($this->ID), $args['size'], false, ['class' => $args['class']]);
 
         } else {
             return null;
         }
+
     }
 
     public function __toString()
