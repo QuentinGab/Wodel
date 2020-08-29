@@ -112,6 +112,21 @@ class Model extends Base
         return $saved >= 0 ? true : false;
 
     }
+    
+    public function delete()
+    {
+        global $wpdb;
+        if (!$this->has_primary_key()) {
+            return false;
+        }
+        $deleted = $wpdb->delete(
+            $this->table,
+            array($this->primary_key => $this->get_primary_key()),
+            array('%d'));
+        
+        return $deleted >= 0 ? true : false;
+
+    }
 
     private static function prepare_where($arr)
     {
