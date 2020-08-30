@@ -53,7 +53,7 @@ class Base
 
     public function fillableToArray()
     {
-        $array = $this->toArray();
+        $array = get_object_vars($this);
         $fillable = $this->fillable;
         return array_filter(
             $array,
