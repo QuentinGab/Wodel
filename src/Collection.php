@@ -148,6 +148,11 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
     {
         return $this->items;
     }
+    
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
 
     public function unique()
     {
