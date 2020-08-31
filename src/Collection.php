@@ -160,14 +160,10 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
     public function toDeepArray()
     {
-        $this->items = array_map(function ($el) {
+        return array_map(function ($el) {
             return $el->toArray();
         }, $this->items);
-
-        return $this;
     }
-
-
 
     public function unique()
     {
@@ -181,6 +177,6 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
     public function toJson()
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toDeepArray());
     }
 }
