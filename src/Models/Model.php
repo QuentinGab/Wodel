@@ -81,7 +81,7 @@ class Model extends Base
     public function _create()
     {
         global $wpdb;
-        $item = self::get_fillable($this->toArray(), $this->fillable);
+        $item = self::get_fillable(get_object_vars($this), $this->fillable);
         $formats = array_map(function ($field) {return (is_int($field) ? '%d' : '%s');}, $item);
 
         $saved = $wpdb->insert(
@@ -99,7 +99,7 @@ class Model extends Base
     {
         global $wpdb;
 
-        $item = self::get_fillable($this->toArray(), $this->fillable);
+        $item = self::get_fillable(get_object_vars($this), $this->fillable);
         $formats = array_map(function ($field) {return (is_int($field) ? '%d' : '%s');}, $item);
         $saved = $wpdb->update(
             $this->table,
