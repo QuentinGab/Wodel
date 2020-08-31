@@ -1,6 +1,9 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace QuentinGab\Wodel\Models;
+
 use QuentinGab\Wodel\Collection;
 
 class Model extends Base
@@ -81,8 +84,10 @@ class Model extends Base
     public function _create()
     {
         global $wpdb;
-        $item = self::get_fillable(get_object_vars($this), $this->fillable);
-        $formats = array_map(function ($field) {return (is_int($field) ? '%d' : '%s');}, $item);
+        $item = $this->fillableData();
+        $formats = array_map(function ($field) {
+            return (is_int($field) ? '%d' : '%s');
+        }, $item);
 
         $saved = $wpdb->insert(
             $this->table,
@@ -99,8 +104,10 @@ class Model extends Base
     {
         global $wpdb;
 
-        $item = self::get_fillable(get_object_vars($this), $this->fillable);
-        $formats = array_map(function ($field) {return (is_int($field) ? '%d' : '%s');}, $item);
+        $item = $this->fillableData();
+        $formats = array_map(function ($field) {
+            return (is_int($field) ? '%d' : '%s');
+        }, $item);
         $saved = $wpdb->update(
             $this->table,
             $item,
@@ -110,9 +117,8 @@ class Model extends Base
         );
 
         return $saved >= 0 ? true : false;
-
     }
-    
+
     public function delete()
     {
         global $wpdb;
@@ -122,10 +128,10 @@ class Model extends Base
         $deleted = $wpdb->delete(
             $this->table,
             array($this->primary_key => $this->get_primary_key()),
-            array('%d'));
-        
-        return $deleted >= 0 ? true : false;
+            array('%d')
+        );
 
+        return $deleted >= 0 ? true : false;
     }
 
     private static function prepare_where($arr)
@@ -145,7 +151,6 @@ class Model extends Base
         }
 
         return $res;
-
     }
 
     public static function find($id)
@@ -163,18 +168,6 @@ class Model extends Base
         return (new static())->_all();
     }
 
-    
-
-    public static function get_fillable($array, $fillable)
-    {
-        return array_filter(
-            $array,
-            function ($key) use ($fillable) {
-                return in_array($key, $fillable);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-    }
 
     private function get_primary_key()
     {
@@ -185,5 +178,4 @@ class Model extends Base
     {
         return property_exists($this, $this->primary_key) and $this->get_primary_key() != null;
     }
-
 }
