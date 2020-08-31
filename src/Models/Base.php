@@ -1,6 +1,9 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace QuentinGab\Wodel\Models;
+
 use QuentinGab\Wodel\Collection;
 
 class Base
@@ -12,10 +15,10 @@ class Base
 
     public function __construct($array = [])
     {
-        $this->fill($array, true);
+        $this->fill($array);
     }
 
-    public function fill($array, $override_fillable = false)
+    public function fill($array)
     {
 
         if (!is_array($array)) {
@@ -23,13 +26,10 @@ class Base
         }
 
         foreach ($array as $key => $value) {
-            if ($override_fillable || in_array($key, $this->fillable)) {
-                $this->{$key} = $this->cast_field($key, $value);
-            }
+            $this->{$key} = $this->cast_field($key, $value);
         }
 
         return $this;
-
     }
 
     protected function cast_field($key, $value)
@@ -51,16 +51,13 @@ class Base
         return $value;
     }
 
-    public function fillableToArray()
+    public function fillableData()
     {
-        $array = get_object_vars($this);
-        $fillable = $this->fillable;
-        return array_filter(
-            $array,
-            function ($key) use ($fillable) {
-                return in_array($key, $fillable);
-            },
-            ARRAY_FILTER_USE_KEY
+        return array_combine(
+            $this->fillable,
+            array_map(function ($key) {
+                return $this->{$key};
+            }, $this->fillable)
         );
     }
 
@@ -84,5 +81,4 @@ class Base
     {
         return json_encode($this->toArray());
     }
-
 }
