@@ -53,12 +53,15 @@ class Base
 
     public function fillableData()
     {
-        return array_combine(
-            $this->fillable,
-            array_map(function ($key) {
-                return $this->{$key};
-            }, $this->fillable)
-        );
+        $data = [];
+
+        foreach ($this->fillable as $key) {
+            if(property_exists($this,$key)){
+                $data[$key] = $this->{$key};
+            }
+        }
+
+        return $data;
     }
 
     public function refresh()
