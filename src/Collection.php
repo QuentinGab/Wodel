@@ -152,6 +152,12 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
         return new Collection(array_map($fun, $this->items));
     }
 
+    public function sort($fun)
+    {
+        usort($this->items, $fun);
+        return $this;
+    }
+
     public function toDeepArray()
     {
         $this->items = array_map(function ($el) {
