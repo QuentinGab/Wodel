@@ -149,6 +149,15 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
         return $this->items;
     }
     
+    public function toDeepArray()
+    {
+        $this->items = array_map(function ($el) {
+            return $el->toArray();
+        }, $this->items);
+
+        return $this;
+    }
+    
     public function toJson()
     {
         return json_encode($this->toArray());
