@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace QuentinGab\Wodel;
 
 class Collection implements \Countable, \Iterator, \ArrayAccess
@@ -19,7 +21,6 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
             $item = $array;
             $this->offsetSet('', $item);
         }
-
     }
 
     public function count()
@@ -83,7 +84,6 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
         } else {
             $this->items[$offset] = $value;
         }
-
     }
 
     public function offsetUnset($offset)
@@ -103,16 +103,13 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
             foreach ($array->toArray() as $item) {
                 $this->offsetSet('', $item);
             }
-
         } else if (is_array($array)) {
             foreach ($array as $item) {
                 $this->offsetSet('', $item);
             }
-
         } else {
             $item = $array;
             $this->offsetSet('', $item);
-
         }
 
         return $this;
@@ -129,26 +126,32 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
             return $this->items[0];
         }
         return false;
-
     }
 
     public function filter($fun)
     {
-        $this->items = array_values(array_filter($this->items, $fun));
-        return $this;
+        return new Collection(array_values(array_filter($this->items, $fun)));
+    }
+
+    public function where($args)
+    {
+        return new Collection(array_filter($this->items, function ($item) use ($args) {
+
+            foreach ($args as $key => $value) {
+                if ($item->{$key} != $value) {
+                    return false;
+                }
+            }
+
+            return true;
+        }));
     }
 
     public function map($fun)
     {
-        $this->items = array_map($fun, $this->items);
-        return $this;
+        return new Collection(array_map($fun, $this->items));
     }
 
-    public function toArray()
-    {
-        return $this->items;
-    }
-    
     public function toDeepArray()
     {
         $this->items = array_map(function ($el) {
@@ -157,15 +160,21 @@ class Collection implements \Countable, \Iterator, \ArrayAccess
 
         return $this;
     }
-    
-    public function toJson()
-    {
-        return json_encode($this->toArray());
-    }
+
+
 
     public function unique()
     {
         return self::collect(array_unique($this->items));
     }
 
+    public function toArray()
+    {
+        return $this->items;
+    }
+
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
 }
