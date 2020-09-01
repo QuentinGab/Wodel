@@ -1,7 +1,9 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
+
 use QuentinGab\Wodel\Collection;
 use QuentinGab\Wodel\Models\Base;
 
@@ -27,22 +29,20 @@ class User extends Base
         'ID' => 'int',
     ];
 
-    private $wp_user;
+    public $wp_user;
 
     public static function all()
     {
         $args = array(
             'fields' => array('ID'),
         );
-        $users = get_users($args);
 
-        $collection = new Collection();
-        foreach ($users as $user) {
-            $item = static::find($user);
-            $collection->_collect($item);
-        }
-        return $collection;
-
+        return new Collection(array_map(
+            function ($id) {
+                return static::find(intval($id));
+            },
+            get_users($args)
+        ));
     }
 
     public static function find($id)
@@ -87,7 +87,6 @@ class User extends Base
             } else {
                 $data[$key] = null;
             }
-
         }
         return $data;
     }
@@ -125,13 +124,12 @@ class User extends Base
             update_user_meta($this->ID, $key, $this->{$key});
         }
 
-        return wp_update_user($this->fillableToArray());
-
+        return wp_update_user($this->userFields());
     }
 
     public function _create()
     {
-        $data = $this->fillableToArray();
+        $data = $this->userFields();
         $data['user_login'] = $this->user_email;
         $data['user_pass'] = $this->user_pass;
         $user_id = wp_insert_user($data);
@@ -147,7 +145,6 @@ class User extends Base
         }
 
         return true;
-
     }
 
     public function delete()
@@ -183,6 +180,16 @@ class User extends Base
             'last_name' => $this->last_name,
         ];
     }
-    
 
+    public function userFields()
+    {
+        return [
+            'ID' => $this->ID,
+            'user_email' => $this->user_email,
+            'user_pass' => $this->user_pass,
+            'user_login' => $this->user_login,
+            'user_nicename' => $this->user_nicename,
+            'display_name' => $this->display_name,
+        ];
+    }
 }
