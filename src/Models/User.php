@@ -38,8 +38,8 @@ class User extends Base
         );
 
         return new Collection(array_map(
-            function ($id) {
-                return static::find(intval($id));
+            function ($user) {
+                return static::find(intval($user->ID));
             },
             get_users($args)
         ));
