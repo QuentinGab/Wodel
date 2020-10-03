@@ -11,6 +11,7 @@ class Wodel extends Base
 
     protected $fillable = [];
     public $acf_fields = [];
+    protected $acf_keys = [];
 
     protected $post_type = 'page';
 
@@ -205,12 +206,16 @@ class Wodel extends Base
             //stored
             $this->ID = $post_id;
             $this->refresh();
+            
         }
 
 
         if ($this->ID) {
             foreach ($this->acf_fields as $key) {
                 update_field($key, $this->{$key}, $this->ID);
+            }
+            foreach ($this->acf_keys as $field => $key) {
+                update_field($key, $this->{$field}, $this->ID);
             }
         }
 
@@ -219,10 +224,10 @@ class Wodel extends Base
 
     public function acf_update_field($key, $value)
     {
-        if(!$this->ID){
+        if (!$this->ID) {
             return false;
         }
-        return update_field($key, $value,$this->ID);
+        return update_field($key, $value, $this->ID);
     }
 
     public function update($array)
