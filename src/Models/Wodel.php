@@ -1,12 +1,16 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace QuentinGab\Wodel\Models;
+
 use QuentinGab\Wodel\Collection;
 
 class Wodel extends Base
 {
 
     protected $fillable = [];
+    public $acf_fields = [];
 
     protected $post_type = 'page';
 
@@ -19,15 +23,14 @@ class Wodel extends Base
         if ($array) {
             $this->fill($array);
         }
-
     }
-    
+
     public function __get($property)
     {
-        if(method_exists(__CLASS__,$property)){
+        if (method_exists(__CLASS__, $property)) {
             return $this->$property();
         }
-        
+
         return null;
     }
 
@@ -82,6 +85,31 @@ class Wodel extends Base
 
         $acf = get_fields($id);
         if ($acf) {
+            $this->acf_fields = array_keys($acf);
+            foreach ($acf as $key => $value) {
+                $this->{$key} = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    public function refresh()
+    {
+        $post = get_post($this->ID);
+        if (!$post || $post->post_type !== $this->post_type) {
+            return false;
+        }
+
+        $post = $post->to_array();
+
+        foreach ($post as $key => $value) {
+            $this->{$key} = $value;
+        }
+
+        $acf = get_fields($this->ID);
+        if ($acf) {
+            $this->acf_fields = array_keys($acf);
             foreach ($acf as $key => $value) {
                 $this->{$key} = $value;
             }
@@ -114,6 +142,7 @@ class Wodel extends Base
             'category__and' => $array['category__and'] ?? null,
             'meta_query' => $array['meta_query'] ?? null,
             'meta_key' => $array['meta_key'] ?? null,
+            'meta_value' => $array['meta_value'] ?? null,
             'meta_type' => $array['meta_type'] ?? null,
             'name' => $array['name'] ?? null,
             'offset' => $array['offset'] ?? null,
@@ -123,6 +152,8 @@ class Wodel extends Base
             'fields' => 'ids',
         );
 
+        // dd($args);
+
         $posts = get_posts($args);
 
         foreach ($posts as $id) {
@@ -130,7 +161,6 @@ class Wodel extends Base
         }
 
         return $collection->unique();
-
     }
 
     public function _all()
@@ -169,7 +199,30 @@ class Wodel extends Base
             'post_parent' => $this->post_parent ?? 0,
         ];
 
-        return wp_insert_post($postarr);
+        $post_id =  wp_insert_post($postarr);
+
+        if ($post_id && !$this->ID) {
+            //stored
+            $this->ID = $post_id;
+            $this->refresh();
+        }
+
+
+        if ($this->ID) {
+            foreach ($this->acf_fields as $key) {
+                update_field($key, $this->{$key}, $this->ID);
+            }
+        }
+
+        return $post_id;
+    }
+
+    public function acf_update_field($key, $value)
+    {
+        if(!$this->ID){
+            return false;
+        }
+        return update_field($key, $value,$this->ID);
     }
 
     public function update($array)
@@ -207,50 +260,43 @@ class Wodel extends Base
     public function image($array = [])
     {
         $args = array_merge([
-            'id'=>null,
-             'class'=>'img-fluid',
-              'size'=>'my_large'
-         ],$array);
+            'id' => null,
+            'class' => 'img-fluid',
+            'size' => 'my_large'
+        ], $array);
 
         if (!is_null($args['id']) && $args['id']) {
 
             return wp_get_attachment_image($args['id'], $args['size'], false, ['class' => $args['class']]);
-
         } else if (has_post_thumbnail($this->ID)) {
 
             return wp_get_attachment_image(get_post_thumbnail_id($this->ID), $args['size'], false, ['class' => $args['class']]);
-
         } else {
             return null;
         }
-
     }
 
     public function image_url($array = [])
     {
         $args = array_merge([
-            'id'=>null,
-             'class'=>'img-fluid',
-              'size'=>'my_large'
-         ],$array);
+            'id' => null,
+            'class' => 'img-fluid',
+            'size' => 'my_large'
+        ], $array);
 
         if (!is_null($args['id']) && $args['id']) {
 
             return wp_get_attachment_image_url($args['id'], $args['size'], false, ['class' => $args['class']]);
-
         } else if (has_post_thumbnail($this->ID)) {
 
             return wp_get_attachment_image_url(get_post_thumbnail_id($this->ID), $args['size'], false, ['class' => $args['class']]);
-
         } else {
             return null;
         }
-
     }
 
     public function __toString()
     {
         return strval($this->ID);
     }
-
 }
