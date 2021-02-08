@@ -91,7 +91,7 @@ class User extends Base
         return $data;
     }
 
-    public function current()
+    public static function current()
     {
         if (is_user_logged_in()) {
             return static::find(get_current_user_id());
