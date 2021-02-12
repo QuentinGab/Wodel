@@ -53,6 +53,9 @@ class Page extends QuentinGab\Wodel\Models\Wodel
 {
     protected $post_type = 'page';
     
+    //only necessary if you want to insert a new post programmatically
+    //otherwise the acf fields will not be populated
+    //If you only get Model or update existing Model you can omit $acf_keys
     protected $acf_keys = [
         'the_field_name' => 'the_field_key',
         'color' => 'field_5f7848684c404',
