@@ -8,17 +8,6 @@
 <!-- [![Coverage Status][ico-scrutinizer]][link-scrutinizer] -->
 <!-- [![Quality Score][ico-code-quality]][link-code-quality] -->
 
-## Structure
-
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
-
-```
-docs/
-src/
-tests/
-```
-
-
 ## Install
 
 Via Composer
@@ -27,14 +16,18 @@ Via Composer
 $ composer require quentingab/wodel
 ```
 
-## Usage
+## Usage with WordPress posts
 
-### Get all posts/page/custom post type
+### Get all posts/page and custom post type
 ``` php
 $posts = QuentinGgab\Models\Wodel::all();
 foreach($posts as $post){
     echo $post->post_title;
 }
+```
+### Get current post with acf
+``` php
+$post = QuentinGab\Models\Wodel::current();
 ```
 
 ### Update a post
@@ -42,6 +35,81 @@ foreach($posts as $post){
 $post = QuentinGab\Models\Wodel::current();
 $post->post_title = "Hello World";
 $post->save();
+```
+
+### Insert a post
+``` php
+$post = new QuentinGab\Models\Wodel(
+    [
+    'post_title'=>'Hello World'
+    ]
+);
+$post->save();
+```
+
+## Extend the Wodel
+``` php
+class Page extends QuentinGab\Wodel\Models\Wodel
+{
+    protected $post_type = 'page';
+    
+    protected $acf_keys = [
+        'the_field_name' => 'the_field_key',
+        'color' => 'field_5f7848684c404',
+    ];
+}
+
+$page = Page::find(1)
+```
+
+
+## Usage with custom table
+if you have data stored in a custom table you can use QuentinGab\Models\Model to interact with the database:
+
+### Example of a custom table
+``` php
+global $wpdb;
+
+$table_name = 'events';
+$charset_collate = $wpdb->get_charset_collate();
+
+$sql = "CREATE TABLE $table_name (
+    id bigint(20) NOT NULL AUTO_INCREMENT,
+    title varchar(255),
+    active boolean DEFAULT 0 NOT NULL,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    PRIMARY KEY  (id)
+) $charset_collate;";
+
+dbDelta($sql);
+```
+### Create a Model class
+``` php
+class Event extends QuentinGab\Wodel\Models\Model
+{
+    protected $table = 'events';
+    
+    protected $primary_key = "id";
+    
+    protected $fillable = [
+        'title'
+    ];
+
+    protected $casts = [
+        'active' => 'bool',
+    ];
+}
+```
+### Get Models
+``` php
+$all = Event::all();
+$only_active = Event::where(['active'=>true]);
+$with_primary_key_1 = Event::fin(1);
+```
+### Save Models
+``` php
+$new_event = new Event(['title'=>'my new event','active'=>false]);
+$new_event->save();
 ```
 
 ## Change log
