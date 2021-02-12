@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
-use QuentinGab\Wodel\Collection;
+use Illuminate\Support\Collection;
 
 class Model extends Base
 {
@@ -50,7 +50,7 @@ class Model extends Base
         $collection = new Collection();
         foreach ($db as $row) {
             $item = new static($row);
-            $collection->_collect($item);
+            $collection->push($item);
         }
         return $collection;
     }
@@ -64,7 +64,7 @@ class Model extends Base
         $collection = new Collection();
         foreach ($db as $row) {
             $item = new static($row);
-            $collection->_collect($item);
+            $collection->push($item);
         }
         return $collection;
     }
@@ -72,8 +72,6 @@ class Model extends Base
 
     public function save()
     {
-        global $wpdb;
-
         if ($this->has_primary_key()) {
             return $this->_update();
         }

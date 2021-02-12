@@ -4,26 +4,29 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
-use QuentinGab\Wodel\Collection;
+use Illuminate\Support\Collection;
+use QuentinGab\Wodel\Models\Base;
 
 class Wodel extends Base
 {
 
+    //properties that can be mass assigned
     protected $fillable = [];
+
+    //acf_field_name
     public $acf_fields = [];
+
+    //acf_field_name => acf_field_id
     protected $acf_keys = [];
 
     protected $post_type = 'page';
 
     public function __construct($array = null)
     {
-        if (isset($array['id'])) {
-            return static::find($array['id']);
-        }
-
         if ($array) {
             $this->fill($array);
         }
+        return $this;
     }
 
     public function __get($property)
@@ -35,7 +38,7 @@ class Wodel extends Base
         return null;
     }
 
-    public static function current()
+    public static function current(): static
     {
         if (get_the_ID()) {
             return static::find(get_the_ID());
@@ -78,18 +81,14 @@ class Wodel extends Base
             return false;
         }
 
-        $post = $post->to_array();
+        $data = $post->to_array();
 
-        foreach ($post as $key => $value) {
-            $this->{$key} = $value;
-        }
+        $this->fill($data);
 
         $acf = get_fields($id);
         if ($acf) {
             $this->acf_fields = array_keys($acf);
-            foreach ($acf as $key => $value) {
-                $this->{$key} = $value;
-            }
+            $this->fill($acf);
         }
 
         return $this;
@@ -97,25 +96,7 @@ class Wodel extends Base
 
     public function refresh()
     {
-        $post = get_post($this->ID);
-        if (!$post || $post->post_type !== $this->post_type) {
-            return false;
-        }
-
-        $post = $post->to_array();
-
-        foreach ($post as $key => $value) {
-            $this->{$key} = $value;
-        }
-
-        $acf = get_fields($this->ID);
-        if ($acf) {
-            $this->acf_fields = array_keys($acf);
-            foreach ($acf as $key => $value) {
-                $this->{$key} = $value;
-            }
-        }
-
+        $this->_find($this->ID);
         return $this;
     }
 
@@ -149,19 +130,24 @@ class Wodel extends Base
             'offset' => $array['offset'] ?? null,
             'include' => $array['include'] ?? null,
             'tax_query' => $array['tax_query'] ?? null,
-            'post__in' => $array['post__in'] ?? null,
-            'fields' => 'ids',
+            'post__in' => $array['post__in'] ?? null
         );
-
-        // dd($args);
 
         $posts = get_posts($args);
 
-        foreach ($posts as $id) {
-            $collection->add(static::find($id));
+        foreach ($posts as $wp_post) {
+            $data = $wp_post->to_array();
+            $acf = get_fields($wp_post->ID);
+
+            $post = new static();
+            $post->fill($data);
+            $post->fill($acf);
+            $post->acf_fields = array_keys($acf);
+
+            $collection->push($post);
         }
 
-        return $collection->unique();
+        return $collection;
     }
 
     public function _all()
@@ -172,22 +158,30 @@ class Wodel extends Base
             'numberposts' => -1,
             'post_type' => $this->post_type,
             'post_status' => 'publish',
-            'fields' => 'ids',
         );
 
         $posts = get_posts($args);
 
-        foreach ($posts as $id) {
-            $collection->add(static::find($id));
+        foreach ($posts as $wp_post) {
+            $data = $wp_post->to_array();
+            $acf = get_fields($wp_post->ID);
+
+            $post = new static();
+            $post->fill($data);
+            $post->fill($acf);
+            $post->acf_fields = array_keys($acf);
+
+            $collection->push($post);
         }
 
-        return $collection->unique();
+        return $collection;
     }
 
     public function save()
     {
+        $isNew = !!$this->ID;
 
-        $postarr = [
+        $data = [
             'ID' => $this->ID ?? 0,
             'post_author' => $this->post_author ?? get_current_user_id(),
             'post_content' => $this->post_content ?? '',
@@ -200,23 +194,27 @@ class Wodel extends Base
             'post_parent' => $this->post_parent ?? 0,
         ];
 
-        $post_id =  wp_insert_post($postarr);
+        $post_id =  wp_insert_post($data);
 
         if ($post_id && !$this->ID) {
             //stored
             $this->ID = $post_id;
-            $this->refresh();
-            
+            // $this->refresh();
         }
 
 
         if ($this->ID) {
-            foreach ($this->acf_fields as $key) {
-                update_field($key, $this->{$key}, $this->ID);
+            if ($isNew) {
+                //When a new post is created, you need to update post with field_id not field_name
+                foreach ($this->acf_keys as $name => $key) {
+                    update_field($key, $this->{$name}, $this->ID);
+                }
+            } else {
+                foreach ($this->acf_fields as $name) {
+                    update_field($name, $this->{$name}, $this->ID);
+                }
             }
-            foreach ($this->acf_keys as $field => $key) {
-                update_field($key, $this->{$field}, $this->ID);
-            }
+            do_action('acf/save_post', $this->ID);
         }
 
         return $post_id;

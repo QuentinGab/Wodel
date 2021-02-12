@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
-use QuentinGab\Wodel\Collection;
-
 class Base
 {
 
@@ -15,7 +13,7 @@ class Base
 
     public function __construct($array = [])
     {
-        $this->fill($array);
+        return $this->fill($array);
     }
 
     public function fill($array)
@@ -56,7 +54,7 @@ class Base
         $data = [];
 
         foreach ($this->fillable as $key) {
-            if(property_exists($this,$key)){
+            if (property_exists($this, $key)) {
                 $data[$key] = $this->{$key};
             }
         }

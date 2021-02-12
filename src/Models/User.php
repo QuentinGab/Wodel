@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
-use QuentinGab\Wodel\Collection;
+use Illuminate\Support\Collection;
 use QuentinGab\Wodel\Models\Base;
 
 use WP_User;
@@ -34,15 +34,18 @@ class User extends Base
     public static function all()
     {
         $args = array(
-            'fields' => array('ID'),
+            'fields' => 'all',
         );
 
-        return new Collection(array_map(
-            function ($user) {
-                return static::find(intval($user->ID));
-            },
-            get_users($args)
-        ));
+        $wp_users = get_users($args);
+
+        $users = array_map(function ($wp_user) {
+            $user = new static();
+            $user->fill($wp_user->to_array(), true);
+            $user->fill($user->get_meta(), true);
+            return $user;
+        }, $wp_users);
+        return new Collection($users);
     }
 
     public static function find($id)
