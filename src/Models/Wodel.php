@@ -19,6 +19,11 @@ class Wodel extends Base
     //acf_field_name => acf_field_id
     protected $acf_keys = [];
 
+    //you must specify if the acf field is a date
+    //otherwise you will not be able to query post with the meta_value
+    //specify field id (to insert/update post) or name (only on update post)
+    protected $acf_dates = [];
+
     protected $post_type = 'page';
 
     public function __construct($array = null)
@@ -38,7 +43,7 @@ class Wodel extends Base
         return null;
     }
 
-    public static function current(): static
+    public static function current()
     {
         if (get_the_ID()) {
             return static::find(get_the_ID());
@@ -179,7 +184,7 @@ class Wodel extends Base
 
     public function save()
     {
-        $isNew = !!$this->ID;
+        $isNew = !$this->ID;
 
         $data = [
             'ID' => $this->ID ?? 0,
@@ -202,16 +207,24 @@ class Wodel extends Base
             // $this->refresh();
         }
 
-
         if ($this->ID) {
             if ($isNew) {
-                //When a new post is created, you need to update post with field_id not field_name
+                //When a new post is created
+                //you need to update post with field_id not field_name
                 foreach ($this->acf_keys as $name => $key) {
-                    update_field($key, $this->{$name}, $this->ID);
+                    if (in_array($key, $this->acf_dates)) {
+                        update_field($key, date_format(date_create($this->{$name}), 'Y-m-d H:i:s'), $this->ID);
+                    } else {
+                        update_field($key, $this->{$name}, $this->ID);
+                    }
                 }
             } else {
                 foreach ($this->acf_fields as $name) {
-                    update_field($name, $this->{$name}, $this->ID);
+                    if (in_array($name, $this->acf_dates)) {
+                        update_field($name, date_format(date_create($this->{$name}), 'Y-m-d H:i:s'), $this->ID);
+                    } else {
+                        update_field($name, $this->{$name}, $this->ID);
+                    }
                 }
             }
             do_action('acf/save_post', $this->ID);

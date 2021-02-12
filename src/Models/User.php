@@ -41,6 +41,7 @@ class User extends Base
 
         $users = array_map(function ($wp_user) {
             $user = new static();
+            $user->wp_user = $wp_user;
             $user->fill($wp_user->to_array(), true);
             $user->fill($user->get_meta(), true);
             return $user;
