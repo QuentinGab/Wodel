@@ -1,4 +1,6 @@
 # wodel
+Easy way to interact with WordPress database, query, insert and update posts.
+And it also works with ACF.
 
 [![Latest Version on Packagist][ico-version]](https://packagist.org/packages/quentingab/wodel)
 [![Software License][ico-license]](LICENSE.md)
