@@ -59,7 +59,8 @@ class Page extends QuentinGab\Wodel\Models\Wodel
     ];
 }
 
-$page = Page::find(1)
+$page = Page::find(1);
+echo $page->color;
 ```
 
 
