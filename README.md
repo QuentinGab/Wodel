@@ -68,7 +68,8 @@ echo $page->color;
 
 
 ## Usage with custom table
-if you have data stored in a custom table you can use QuentinGab\Models\Model to interact with the database:
+if you have data stored in a custom table you can use QuentinGab\Models\Model to interact with the database.
+Under the hood it only use default WordPress object $wpdb.
 
 ### Example of a custom table
 ``` php
@@ -104,13 +105,13 @@ class Event extends QuentinGab\Wodel\Models\Model
     ];
 }
 ```
-### Get Models
+### Get Model
 ``` php
 $all = Event::all();
 $only_active = Event::where(['active'=>true]);
 $with_primary_key_1 = Event::fin(1);
 ```
-### Save Models
+### Save Model
 ``` php
 $new_event = new Event(['title'=>'my new event','active'=>false]);
 $new_event->save();
