@@ -108,7 +108,7 @@ class Event extends QuentinGab\Wodel\Models\Model
 ``` php
 $all = Event::all();
 $only_active = Event::where(['active'=>true]);
-$with_primary_key_1 = Event::fin(1);
+$with_primary_key_1 = Event::find(1);
 ```
 ### Save Models
 ``` php
