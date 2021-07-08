@@ -22,7 +22,7 @@ class Base
     {
         if (property_exists($this, $property)) {
             return $this->$property;
-        } else if (method_exists(__CLASS__, $property)) {
+        } else if (method_exists($this, $property)) {
             return $this->$property();
         }
 
@@ -32,16 +32,16 @@ class Base
     public function load($relations)
     {
         foreach (Arr::wrap($relations) as $relation) {
-            if (method_exists(__CLASS__, $relation)) {
+            if (method_exists($this, $relation)) {
                 $this->$relation();
-                return $this;
             }
         }
+        return $this;
     }
 
     public function hasRelationLoaded($relation)
     {
-        return property_exists($this, $relation) && method_exists(__CLASS__, $relation);
+        return property_exists($this, $relation) && method_exists($this, $relation);
     }
 
     public function fill($array)
