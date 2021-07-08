@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
+use Illuminate\Support\Arr;
+
 class Base
 {
 
@@ -14,6 +16,32 @@ class Base
     public function __construct($array = [])
     {
         return $this->fill($array);
+    }
+
+    public function __get($property)
+    {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        } else if (method_exists(__CLASS__, $property)) {
+            return $this->$property();
+        }
+
+        return null;
+    }
+
+    public function load($relations)
+    {
+        foreach (Arr::wrap($relations) as $relation) {
+            if (method_exists(__CLASS__, $relation)) {
+                $this->$relation();
+                return $this;
+            }
+        }
+    }
+
+    public function hasRelationLoaded($relation)
+    {
+        return property_exists($this, $relation) && method_exists(__CLASS__, $relation);
     }
 
     public function fill($array)
