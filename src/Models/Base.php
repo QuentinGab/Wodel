@@ -6,6 +6,8 @@ namespace QuentinGab\Wodel\Models;
 
 use Illuminate\Support\Arr;
 
+use function PHPUnit\Framework\returnSelf;
+
 class Base
 {
 
@@ -42,6 +44,12 @@ class Base
     public function hasRelationLoaded($relation)
     {
         return property_exists($this, $relation) && method_exists($this, $relation);
+    }
+
+    public function whenLoaded($relation, $callback, $default = null)
+    {
+        if ($this->hasRelationLoaded($relation)) return $callback();
+        return $default;
     }
 
     public function fill($array)

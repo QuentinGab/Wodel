@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QuentinGab\Wodel\Models;
 
+use Exception;
 use Illuminate\Support\Collection;
 use QuentinGab\Wodel\Models\Base;
 
@@ -147,7 +148,7 @@ class Wodel extends Base
             $post = new static();
             $post->fill($data);
             $post->fill($acf);
-            $post->acf_fields = array_keys($acf);
+            $post->acf_fields = $acf ? array_keys($acf) : [];
 
             $collection->push($post);
         }
@@ -201,11 +202,11 @@ class Wodel extends Base
 
         $post_id =  wp_insert_post($data);
 
-        if ($post_id && !$this->ID) {
-            //stored
-            $this->ID = $post_id;
-            // $this->refresh();
+        if (!$post_id) {
+            throw new Exception('Could not save ' . $this->post_type . ' ' . $this->ID);
         }
+
+        $this->ID = $post_id;
 
         if ($this->ID) {
             if ($isNew) {
