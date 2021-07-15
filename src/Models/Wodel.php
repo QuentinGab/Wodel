@@ -37,7 +37,9 @@ class Wodel extends Base
 
     public function __get($property)
     {
-        if (method_exists(__CLASS__, $property)) {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        } elseif (method_exists($this, $property)) {
             return $this->$property();
         }
 
