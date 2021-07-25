@@ -177,7 +177,7 @@ class Wodel extends Base
             $post = new static();
             $post->fill($data);
             $post->fill($acf);
-            $post->acf_fields = array_keys($acf);
+            $post->acf_fields = $acf ? array_keys($acf) : [];
 
             $collection->push($post);
         }
@@ -293,6 +293,11 @@ class Wodel extends Base
         } else {
             return null;
         }
+    }
+
+    public function imageID()
+    {
+        return get_post_thumbnail_id($this->ID);
     }
 
     public function image_url($array = [])
