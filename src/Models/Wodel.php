@@ -86,7 +86,7 @@ class Wodel extends Base
 
         $post = get_post($id);
         if (!$post || $post->post_type !== $this->post_type) {
-            return false;
+            return null;
         }
 
         $data = $post->to_array();
